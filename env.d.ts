@@ -4,7 +4,7 @@
 declare namespace Cloudflare {
 	interface Env {
 		ASSETS: Fetcher;
-		CONTENTFUL_SPACE: string;
+		CONTENTFUL_SPACE_ID: string;
 		CONTENTFUL_ACCESS_TOKEN: string;
 	}
 }

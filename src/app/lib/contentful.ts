@@ -15,7 +15,7 @@ export function getContentfulClient(): ContentfulClientApi<undefined> {
     try {
         // Try to get Cloudflare environment variables (only works at runtime in Cloudflare)
         const { env } = getCloudflareContext();
-        space = env.CONTENTFUL_SPACE;
+        space = env.CONTENTFUL_SPACE_ID;
         accessToken = env.CONTENTFUL_ACCESS_TOKEN;
     } catch (error) {
         // Fallback to process.env for local development or build time
@@ -24,7 +24,7 @@ export function getContentfulClient(): ContentfulClientApi<undefined> {
     }
 
     if (!space || !accessToken) {
-        throw new Error('Contentful credentials not found. Set CONTENTFUL_SPACE and CONTENTFUL_ACCESS_TOKEN (Cloudflare) or NEXT_PUBLIC_CONTENTFUL_SPACE_ID and NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN (local development).');
+        throw new Error('Contentful credentials not found. Set CONTENTFUL_SPACE_ID and CONTENTFUL_ACCESS_TOKEN (Cloudflare) or NEXT_PUBLIC_CONTENTFUL_SPACE_ID and NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN (local development).');
     }
 
     cachedClient = createClient({
