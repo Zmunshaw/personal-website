@@ -1,33 +1,48 @@
-import { createClient } from 'contentful';
+import { createClient, ContentfulClientApi } from 'contentful';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 
-export function getContentfulClient() {
-    try {
-        // Try to get Cloudflare environment variables
-        const { env } = getCloudflareContext();
+let cachedClient: ContentfulClientApi<undefined> | null = null;
 
-        if (!env.CONTENTFUL_SPACE) {
-            throw new Error('CONTENTFUL_SPACE is not defined in Cloudflare environment');
-        }
-
-        if (!env.CONTENTFUL_ACCESS_TOKEN) {
-            throw new Error('CONTENTFUL_ACCESS_TOKEN is not defined in Cloudflare environment');
-        }
-
-        return createClient({
-            space: env.CONTENTFUL_SPACE,
-            accessToken: env.CONTENTFUL_ACCESS_TOKEN,
-        });
-    } catch (error) {
-        // Fallback for development with process.env
-        if (process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID && process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN) {
-            return createClient({
-                space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
-                accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-            });
-        }
-        throw error;
+export function getContentfulClient(): ContentfulClientApi<undefined> {
+    // Return cached client if available
+    if (cachedClient) {
+        return cachedClient;
     }
+
+    let space: string | undefined;
+    let accessToken: string | undefined;
+
+    try {
+        // Try to get Cloudflare environment variables (only works at runtime in Cloudflare)
+        const { env } = getCloudflareContext();
+        space = env.CONTENTFUL_SPACE;
+        accessToken = env.CONTENTFUL_ACCESS_TOKEN;
+    } catch (error) {
+        // Fallback to process.env for local development or build time
+        space = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
+        accessToken = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
+    }
+
+    if (!space || !accessToken) {
+        throw new Error('Contentful credentials not found. Set CONTENTFUL_SPACE and CONTENTFUL_ACCESS_TOKEN (Cloudflare) or NEXT_PUBLIC_CONTENTFUL_SPACE_ID and NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN (local development).');
+    }
+
+    cachedClient = createClient({
+        space,
+        accessToken,
+    });
+
+    return cachedClient;
 }
 
-export const contentfulClient = getContentfulClient();
+// Export a getter function instead of the client directly
+export const contentfulClient = {
+    getEntries: (...args: Parameters<ContentfulClientApi<undefined>['getEntries']>) =>
+        getContentfulClient().getEntries(...args),
+    getEntry: (...args: Parameters<ContentfulClientApi<undefined>['getEntry']>) =>
+        getContentfulClient().getEntry(...args),
+    getAsset: (...args: Parameters<ContentfulClientApi<undefined>['getAsset']>) =>
+        getContentfulClient().getAsset(...args),
+    getAssets: (...args: Parameters<ContentfulClientApi<undefined>['getAssets']>) =>
+        getContentfulClient().getAssets(...args),
+};
