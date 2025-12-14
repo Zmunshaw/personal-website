@@ -12,15 +12,19 @@ export function getContentfulClient(): ContentfulClientApi<undefined> {
     let space: string | undefined;
     let accessToken: string | undefined;
 
-    try {
-        // Try to get Cloudflare environment variables (only works at runtime in Cloudflare)
-        const { env } = getCloudflareContext();
-        space = env.CONTENTFUL_SPACE_ID;
-        accessToken = env.CONTENTFUL_ACCESS_TOKEN;
-    } catch (error) {
-        // Fallback to process.env for local development or build time
-        space = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
-        accessToken = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
+    // First, try to get from process.env (local development)
+    space = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
+    accessToken = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
+
+    // If not found in process.env, try Cloudflare context (production)
+    if (!space || !accessToken) {
+        try {
+            const { env } = getCloudflareContext();
+            space = env.CONTENTFUL_SPACE_ID;
+            accessToken = env.CONTENTFUL_ACCESS_TOKEN;
+        } catch (error) {
+            // getCloudflareContext() will fail in development mode, which is expected
+        }
     }
 
     if (!space || !accessToken) {
