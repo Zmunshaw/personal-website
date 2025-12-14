@@ -1,47 +1,60 @@
 import { contentfulClient } from '../lib/contentful';
 import { ProjectDetails } from '../Types/ProjectTypes';
-import { Asset, Entry } from 'contentful';
+import { Entry, EntrySkeletonType } from 'contentful';
 import { projects as mockProjects } from '../testing/mocks/projects';
 
-interface ContentfulTechnology {
+interface ContentfulAsset {
+    fields: {
+        file?: {
+            url?: string;
+        };
+    };
+}
+
+interface ContentfulTechnology extends EntrySkeletonType {
+    contentTypeId: 'technology';
     fields: {
         name: string;
         description?: string;
-        icon?: Asset;
+        icon?: ContentfulAsset;
         url?: string;
     };
 }
 
-interface ContentfulProjectType {
+interface ContentfulProjectType extends EntrySkeletonType {
+    contentTypeId: 'projectType';
     fields: {
         name: string;
         description: string;
         information: string;
-        icon?: Asset;
+        icon?: ContentfulAsset;
     };
 }
 
-interface ContentfulProjectCategory {
+interface ContentfulProjectCategory extends EntrySkeletonType {
+    contentTypeId: 'projectCategory';
     fields: {
         name: string;
         description: string;
-        icon?: Asset;
+        icon?: ContentfulAsset;
     };
 }
 
-interface ContentfulProjectAttribute {
+interface ContentfulProjectAttribute extends EntrySkeletonType {
+    contentTypeId: 'projectAttribute';
     fields: {
         name: string;
         description: string;
-        icon?: Asset;
+        icon?: ContentfulAsset;
     };
 }
 
-interface ContentfulProject {
+interface ContentfulProject extends EntrySkeletonType {
+    contentTypeId: 'porfolioProjects';
     fields: {
         projectId: number;
         projectName: string;
-        icon: Asset;
+        icon: ContentfulAsset;
         shortDescription?: any;
         longDescription?: any;
         repository?: string;
@@ -78,7 +91,7 @@ export async function fetchProjects(): Promise<ProjectDetails[]> {
             return mockProjects;
         }
 
-        const response = await contentfulClient.getEntries<ContentfulProject>({
+        const response = await contentfulClient.getEntries({
             content_type: 'porfolioProjects',
         });
 
@@ -88,7 +101,7 @@ export async function fetchProjects(): Promise<ProjectDetails[]> {
         }
 
         return response.items.map((item) => {
-            const fields = item.fields;
+            const fields = item.fields as any;
             const iconUrl = fields.icon?.fields?.file?.url;
 
             return {
@@ -112,7 +125,7 @@ export async function fetchProjects(): Promise<ProjectDetails[]> {
                         isImage: false,
                     },
                 } : undefined,
-                attributes: fields.projectAttributes?.map((attr) => ({
+                attributes: fields.projectAttributes?.map((attr: any) => ({
                     id: attr.sys.id,
                     name: attr.fields.name || '',
                     description: attr.fields.description || '',
@@ -127,7 +140,7 @@ export async function fetchProjects(): Promise<ProjectDetails[]> {
                         isImage: false,
                     },
                 } : undefined,
-                techs: fields.projectTechs?.map((tech) => {
+                techs: fields.projectTechs?.map((tech: any) => {
                     const techIconUrl = tech.fields.icon?.fields?.file?.url;
                     const techDescription = typeof tech.fields.description === 'string'
                         ? tech.fields.description

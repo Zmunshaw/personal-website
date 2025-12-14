@@ -13,6 +13,11 @@ export const projects: ProjectDetails[] = [
             isImage: true,
             src: CSLogo,
         },
+        techs: [
+            { id: "1", name: "Next.js", description: "React framework", icon: { isImage: false, iconName: "SiNextdotjs" } },
+            { id: "2", name: "TypeScript", description: "Type-safe JavaScript", icon: { isImage: false, iconName: "SiTypescript" } },
+            { id: "3", name: "Tailwind", description: "CSS framework", icon: { isImage: false, iconName: "SiTailwindcss" } },
+        ],
     },
     {
         id: "1",
@@ -26,6 +31,10 @@ export const projects: ProjectDetails[] = [
             color: "#2496ED",
             size: 150,
         },
+        techs: [
+            { id: "4", name: "Flutter", description: "Mobile framework", icon: { isImage: false, iconName: "FaFlutter" } },
+            { id: "5", name: "Dart", description: "Programming language", icon: { isImage: false } },
+        ],
     },
     {
         id: "2",
@@ -43,6 +52,12 @@ export const projects: ProjectDetails[] = [
             color: "#2496ED",
             size: 150,
         },
+        techs: [
+            { id: "6", name: "Docker", description: "Container platform", icon: { isImage: false } },
+            { id: "7", name: "PostgreSQL", description: "Database", icon: { isImage: false } },
+            { id: "8", name: "Redis", description: "Cache", icon: { isImage: false } },
+            { id: "9", name: "GitLab", description: "DevOps platform", icon: { isImage: false } },
+        ],
     },
     {
         id: "3",
@@ -56,6 +71,10 @@ export const projects: ProjectDetails[] = [
             color: "#00ADD8",
             size: 150,
         },
+        techs: [
+            { id: "10", name: "Go", description: "Programming language", icon: { isImage: false } },
+            { id: "11", name: "Concurrency", description: "Async processing", icon: { isImage: false } },
+        ],
     },
     {
         id: "4",
@@ -67,5 +86,10 @@ export const projects: ProjectDetails[] = [
             isImage: true,
             src: TSLogo,
         },
+        techs: [
+            { id: "12", name: "React", description: "UI library", icon: { isImage: false } },
+            { id: "13", name: "TypeScript", description: "Type-safe JavaScript", icon: { isImage: false } },
+            { id: "14", name: "CSS", description: "Styling", icon: { isImage: false } },
+        ],
     },
 ];

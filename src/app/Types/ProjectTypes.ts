@@ -46,4 +46,5 @@ export interface ProjectTech {
     name: string;
     description: string;
     icon: IconProps;
+    url?: string;
 }

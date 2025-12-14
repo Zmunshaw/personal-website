@@ -3,7 +3,7 @@ import "./globals.css";
 import NavBar from "./ui/shared/NavBar";
 import {RightAreaIcons} from "./Types/NavBarTypes";
 import {ProjectProvider} from "./context/ProjectContext";
-import {projects} from "./testing/mocks/projects";
+import {fetchProjects} from "./services/projectService";
 
 export const metadata: Metadata = {
 	title: "Developer Portfolio - Zachary Munshaw",
@@ -29,11 +29,13 @@ const icons: RightAreaIcons[] = [
     },
 ];
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const projects = await fetchProjects();
+
 	return (
 		<html lang="en">
 			<body>
