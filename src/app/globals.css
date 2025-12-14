@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
+html, body, :root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    min-width: 100%;
+
+    color-scheme: light dark;
+    color: #00ff88;
+    background-color: #0a0a0f;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-@theme inline {
-	--color-background: var(--background);
-	--color-foreground: var(--foreground);
-	--font-sans: var(--font-geist-sans);
-	--font-mono: var(--font-geist-mono);
+a {
+    font-weight: 500;
+    color: #00ff88;
+    text-decoration: inherit;
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
+    transition: all 0.3s ease;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
-	}
+a:hover {
+    color: #ff006e;
 }
 
 body {
-	background: var(--background);
-	color: var(--foreground);
-	font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+    color: #00ff88;
+}
+
+button {
+    border-radius: 4px;
+    border: 2px solid #ff006e;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #0f0f1a;
+    color: #00ff88;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover {
+    border-color: #00ff88;
+    color: #ff006e;
+}
+
+button:focus,
+button:focus-visible {
+    outline: 2px solid #00ff88;
+    outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        color: #213547;
+        background-color: #ffffff;
+    }
+
+    a {
+        color: #213547;
+    }
+
+    a:hover {
+        color: #747bff;
+    }
+
+    button {
+        background-color: #f9f9f9;
+        border-color: #747bff;
+        color: #213547;
+    }
+
+    button:hover {
+        border-color: #213547;
+    }
+
+    h1 {
+        color: #213547;
+    }
 }
