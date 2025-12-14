@@ -84,12 +84,8 @@ function extractTextFromRichText(richText: any): string {
 export async function fetchProjects(): Promise<ProjectDetails[]> {
     try {
         // Check if Contentful is configured
-        if (!process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID ||
-            !process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN ||
-            process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN === 'your_access_token_here') {
-            console.warn('Contentful not configured, using mock data');
-            return mockProjects;
-        }
+        // This will work both in Cloudflare (using env vars) and in development (using process.env)
+        // The contentfulClient is already configured in lib/contentful.ts
 
         const response = await contentfulClient.getEntries({
             content_type: 'porfolioProjects',
